@@ -1,0 +1,35 @@
+/* Ensure link buttons look like actual links */
+.slds-text-link {
+  color: var(--slds-g-color-brand-base-10, #0176d3);
+  text-decoration: none;
+  text-align: left;
+}
+
+.slds-text-link:hover {
+  color: var(--slds-g-color-brand-base-20, #014486);
+  text-decoration: underline;
+}
+
+.slds-text-link:focus {
+  outline: 1px solid var(--slds-g-color-brand-base-10, #0176d3);
+  outline-offset: 2px;
+}
+
+/* Reset button for badge wrapper */
+.slds-button_reset {
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+.slds-button_reset:hover {
+  background: transparent;
+}
+
+/* Table row hover effects */
+.slds-table tbody tr:hover {
+  background-color: var(--slds-g-color-neutral-base-95, #f3f2f2);
+}

@@ -1,0 +1,115 @@
+<template>
+  <div class="slds-page-header toolbar">
+    <div class="slds-page-header__row">
+      <div class="slds-page-header__col-title">
+        <div class="slds-media">
+          <div class="slds-media__body">
+            <div class="slds-page-header__name">
+              <div class="slds-page-header__name-title">
+                <h1>
+                  <span class="slds-page-header__title slds-truncate">
+                    {selectionText}
+                  </span>
+                </h1>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slds-page-header__col-actions">
+        <div class="slds-page-header__controls">
+          <div class="slds-page-header__control">
+            <!-- View Mode Toggle -->
+            <lightning-button-group>
+              <template for:each={viewModeOptions} for:item="option">
+                <lightning-button
+                  key={option.value}
+                  label={option.label}
+                  icon-name={option.iconName}
+                  data-value={option.value}
+                  onclick={handleViewModeChange}
+                  variant="neutral"
+                ></lightning-button>
+              </template>
+            </lightning-button-group>
+          </div>
+
+          <!-- Sort Controls -->
+          <div class="slds-page-header__control">
+            <lightning-combobox
+              name="sortBy"
+              label="Sort By"
+              value={sortBy}
+              placeholder="Sort By"
+              options={sortOptions}
+              onchange={handleSortChange}
+              variant="label-hidden"
+              dropdown-alignment="right"
+            ></lightning-combobox>
+          </div>
+
+          <div class="slds-page-header__control">
+            <lightning-button
+              icon-name={sortIconName}
+              alternative-text="Toggle Sort Direction"
+              onclick={handleSortDirectionToggle}
+              variant="neutral"
+            ></lightning-button>
+          </div>
+
+          <!-- Select All Toggle -->
+          <div class="slds-page-header__control">
+            <lightning-button
+              label={selectAllButtonLabel}
+              icon-name={selectAllIconName}
+              onclick={handleSelectAllToggle}
+              variant="neutral"
+            ></lightning-button>
+          </div>
+
+          <!-- Bulk Actions -->
+          <div class="slds-page-header__control">
+            <lightning-button
+              label="Delete Selected"
+              icon-name="utility:delete"
+              onclick={handleBulkDelete}
+              disabled={hasNoSelection}
+              variant={deleteButtonVariant}
+            ></lightning-button>
+          </div>
+
+          <div class="slds-page-header__control">
+            <lightning-button
+              label="Download Selected"
+              icon-name="utility:download"
+              onclick={handleBulkDownload}
+              disabled={hasNoSelection}
+              variant={downloadButtonVariant}
+            ></lightning-button>
+          </div>
+
+          <div class="slds-page-header__control">
+            <lightning-button
+              label="Share Selected"
+              icon-name="utility:share"
+              onclick={handleBulkShare}
+              disabled={hasNoSelection}
+              variant="neutral"
+            ></lightning-button>
+          </div>
+
+          <div class="slds-page-header__control">
+            <lightning-button
+              label="Change Owner"
+              icon-name="utility:user"
+              onclick={handleBulkChangeOwner}
+              disabled={hasNoSelection}
+              variant="neutral"
+            ></lightning-button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</template>

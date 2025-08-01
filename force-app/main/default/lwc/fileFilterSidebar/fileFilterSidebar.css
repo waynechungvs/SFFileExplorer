@@ -1,0 +1,11 @@
+.filter-sidebar {
+  background-color: #f3f3f3;
+  border: 1px solid #dddbda;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.slds-form-element__legend {
+  font-weight: 600;
+  color: #3e3e3c;
+}

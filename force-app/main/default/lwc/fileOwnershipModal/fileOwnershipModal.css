@@ -1,0 +1,41 @@
+/* File ownership modal styling */
+.ownership-file-info {
+  background: linear-gradient(135deg, var(--slds-g-color-brand-base-95, #e8f4fd), var(--slds-g-color-brand-base-90, #d1e7fc));
+  border: 1px solid var(--slds-g-color-brand-base-80, #b6d7fb);
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+}
+
+.current-owner-info {
+  background: var(--slds-g-color-neutral-base-95, #f3f2f2);
+  border: 1px solid var(--slds-g-color-neutral-base-80, #c9c7c5);
+  display: flex;
+  align-items: center;
+}
+
+/* Warning alert styling */
+.slds-theme_warning {
+  border-left: 4px solid var(--slds-g-color-warning-base-40, #fe9339);
+}
+
+/* Progress styling */
+.slds-progress-bar__value {
+  background: linear-gradient(90deg, var(--slds-g-color-success-base-50, #45c65a), var(--slds-g-color-success-base-40, #27ae60));
+  transition: width 0.3s ease;
+}
+
+/* Modal content spacing */
+.slds-modal__content {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .ownership-file-info,
+  .current-owner-info {
+    padding: 8px;
+    font-size: 0.875rem;
+  }
+}

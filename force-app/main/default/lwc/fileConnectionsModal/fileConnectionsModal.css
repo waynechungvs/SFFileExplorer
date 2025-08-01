@@ -1,0 +1,113 @@
+/* Modern connections modal styling */
+.connections-list {
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 4px; /* Account for scrollbar */
+}
+
+/* Connection card styling */
+.connection-card {
+  border-left: 4px solid var(--slds-g-color-brand-base-10, #0176d3);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.connection-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-left-color: var(--slds-g-color-brand-base-20, #014486);
+}
+
+/* Icon wrapper styling */
+.connection-icon-wrapper {
+  background: linear-gradient(135deg, var(--slds-g-color-brand-base-10, #0176d3), var(--slds-g-color-brand-base-20, #014486));
+  border-radius: 50%;
+  padding: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.connection-icon {
+  color: white;
+}
+
+/* Connection title styling */
+.connection-title {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--slds-g-color-neutral-base-10, #3e3e3c);
+  text-decoration: none;
+}
+
+.connection-title:hover {
+  color: var(--slds-g-color-brand-base-10, #0176d3);
+  text-decoration: underline;
+}
+
+.connection-subtitle {
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+/* Connection details styling */
+.connection-details {
+  background-color: var(--slds-g-color-neutral-base-95, #f3f2f2);
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.connection-description,
+.connection-additional {
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+
+.connection-description {
+  font-weight: 500;
+}
+
+/* Badge styling */
+.connection-badges {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Open button styling */
+.connection-open-btn:hover {
+  transform: scale(1.05);
+  transition: transform 0.1s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .connection-card {
+    margin-bottom: 8px;
+  }
+  
+  .connection-details {
+    padding: 6px 8px;
+  }
+}
+
+/* Custom scrollbar for connections list */
+.connections-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.connections-list::-webkit-scrollbar-track {
+  background: var(--slds-g-color-neutral-base-95, #f3f2f2);
+  border-radius: 3px;
+}
+
+.connections-list::-webkit-scrollbar-thumb {
+  background: var(--slds-g-color-neutral-base-80, #c9c7c5);
+  border-radius: 3px;
+}
+
+.connections-list::-webkit-scrollbar-thumb:hover {
+  background: var(--slds-g-color-neutral-base-70, #b0adab);
+}

@@ -1,0 +1,23 @@
+.main-container {
+  transition: all 0.3s ease;
+}
+
+.main-container.full-width {
+  width: 100%;
+}
+
+.slds-col {
+  padding: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .main-container {
+    flex: 0 0 75%;
+    max-width: 75%;
+  }
+
+  .main-container.full-width {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}

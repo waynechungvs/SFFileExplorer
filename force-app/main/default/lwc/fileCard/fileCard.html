@@ -1,0 +1,119 @@
+<template>
+  <article class={cardClass} onclick={handleCardClick}>
+    <div class="slds-card__header slds-grid">
+      <header class="slds-media slds-media_center slds-has-flexi-truncate">
+        <div class="slds-media__figure">
+          <lightning-icon icon-name={fileIcon} size="large"></lightning-icon>
+        </div>
+        <div class="slds-media__body">
+          <h2 class="slds-card__header-title">
+            <span
+              class="slds-text-heading_small slds-truncate"
+              title={file.fileName}
+            >
+              {file.fileName}
+            </span>
+          </h2>
+          <p class="slds-text-body_small slds-text-color_weak">
+            {file.fileType} • {file.fileSize}
+          </p>
+        </div>
+        <div class="slds-no-flex">
+          <lightning-input
+            type="checkbox"
+            variant="label-hidden"
+            checked={isSelected}
+            onchange={handleCheckboxChange}
+            onclick={handleCheckboxChange}
+          ></lightning-input>
+        </div>
+      </header>
+    </div>
+    <div class="slds-card__body slds-card__body_inner">
+      <dl class="slds-list_horizontal slds-wrap">
+        <dt
+          class="slds-item_label slds-text-color_weak slds-truncate"
+          title="Created By"
+        >
+          Created By:
+        </dt>
+        <dd class="slds-item_detail slds-truncate" title={file.createdBy}>
+          {file.createdBy}
+        </dd>
+
+        <dt
+          class="slds-item_label slds-text-color_weak slds-truncate"
+          title="Current Owner"
+        >
+          Current Owner:
+        </dt>
+        <dd class="slds-item_detail slds-truncate" title={file.currentOwner}>
+          {file.currentOwner}
+        </dd>
+
+        <dt
+          class="slds-item_label slds-text-color_weak slds-truncate"
+          title="Created Date"
+        >
+          Created:
+        </dt>
+        <dd class="slds-item_detail slds-truncate">{formattedCreatedDate}</dd>
+
+        <dt
+          class="slds-item_label slds-text-color_weak slds-truncate"
+          title="Usage Level"
+        >
+          Usage:
+        </dt>
+        <dd class="slds-item_detail">
+          <lightning-badge
+            label={usageLevelBadge.label}
+            variant={usageLevelBadge.variant}
+          ></lightning-badge>
+          <br />
+          <small class="slds-text-color_weak">
+            <button 
+              class="slds-button slds-button_reset slds-text-link" 
+              onclick={handleLinksClick}
+              title="View file connections"
+            >
+              {file.linkCount} links
+            </button>
+          </small>
+        </dd>
+      </dl>
+    </div>
+    <footer class="slds-card__footer">
+      <div class="slds-button-group" role="group">
+        <a
+          class="slds-button slds-button_neutral"
+          href={file.previewUrl}
+          target="_blank"
+          onclick={handlePreviewClick}
+        >
+          Preview
+        </a>
+        <a
+          class="slds-button slds-button_neutral"
+          href={file.downloadUrl}
+          download
+        >
+          Download
+        </a>
+        <button
+          class="slds-button slds-button_neutral"
+          onclick={handleShareClick}
+        >
+          Share
+        </button>
+        <button
+          class="slds-button slds-button_neutral"
+          onclick={handleChangeOwnerClick}
+          title="Transfer file ownership"
+        >
+          Change Owner
+        </button>
+      </div>
+    </footer>
+  </article>
+</template>

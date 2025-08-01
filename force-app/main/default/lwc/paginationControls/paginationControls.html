@@ -1,0 +1,72 @@
+<template>
+  <div
+    class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-p-around_medium pagination-container"
+  >
+    <!-- Page Size Selector -->
+    <div class="slds-col">
+      <lightning-combobox
+        name="pageSize"
+        label="Page Size"
+        value={pageSize}
+        placeholder="Select page size"
+        options={pageSizeOptionsFormatted}
+        onchange={handlePageSizeChange}
+        variant="label-hidden"
+        dropdown-alignment="left"
+      ></lightning-combobox>
+    </div>
+
+    <!-- Page Info -->
+    <div class="slds-col">
+      <span class="slds-text-body_regular">{pageInfo}</span>
+    </div>
+
+    <!-- Navigation Controls -->
+    <div class="slds-col">
+      <lightning-button-group>
+        <lightning-button
+          label="First"
+          onclick={handleFirst}
+          disabled={isFirstPage}
+          variant="neutral"
+        ></lightning-button>
+        <lightning-button
+          icon-name="utility:chevronleft"
+          alternative-text="Previous"
+          onclick={handlePrevious}
+          disabled={isFirstPage}
+          variant="neutral"
+        ></lightning-button>
+
+        <!-- Page Number Input -->
+        <span class="slds-p-horizontal_x-small">
+          Page
+          <lightning-input
+            type="number"
+            value={pageNumber}
+            min="1"
+            max={totalPages}
+            onchange={handlePageNumberChange}
+            variant="label-hidden"
+            class="page-input"
+          ></lightning-input>
+          of {totalPages}
+        </span>
+
+        <lightning-button
+          icon-name="utility:chevronright"
+          alternative-text="Next"
+          onclick={handleNext}
+          disabled={isLastPage}
+          variant="neutral"
+        ></lightning-button>
+        <lightning-button
+          label="Last"
+          onclick={handleLast}
+          disabled={isLastPage}
+          variant="neutral"
+        ></lightning-button>
+      </lightning-button-group>
+    </div>
+  </div>
+</template>

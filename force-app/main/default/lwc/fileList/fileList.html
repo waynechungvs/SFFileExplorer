@@ -1,0 +1,198 @@
+<template>
+  <!-- Card View -->
+  <template if:true={isCardView}>
+    <div class="slds-grid slds-wrap slds-gutters slds-p-around_medium">
+      <template for:each={filesWithSelection} for:item="file">
+        <div
+          key={file.contentDocumentId}
+          class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3"
+        >
+          <c-file-card
+            file={file}
+            is-selected={file.isSelected}
+            onfileselect={handleFileSelect}
+            onfileclick={handleFileClick}
+            onfileshare={handleFileShare}
+            onviewconnections={handleLinksClick}
+            onchangeowner={handleChangeOwner}
+          ></c-file-card>
+        </div>
+      </template>
+    </div>
+  </template>
+
+  <!-- List View -->
+  <template if:true={isListView}>
+    <div class="slds-p-around_medium">
+      <table
+        class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped"
+      >
+        <thead>
+          <tr class="slds-line-height_reset">
+            <th scope="col" class="slds-text-align_center" style="width: 3rem">
+              <div class="slds-form-element">
+                <div class="slds-form-element__control">
+                  <div class="slds-checkbox">
+                    <lightning-input
+                      type="checkbox"
+                      variant="label-hidden"
+                      name="selectAll"
+                      onchange={handleSelectAllToggle}
+                    ></lightning-input>
+                  </div>
+                </div>
+              </div>
+            </th>
+            <th scope="col">
+              <div class="slds-truncate" title="File Name">File Name</div>
+            </th>
+            <th scope="col">
+              <div class="slds-truncate" title="Type">Type</div>
+            </th>
+            <th scope="col">
+              <div class="slds-truncate" title="Size">Size</div>
+            </th>
+            <th scope="col">
+              <div class="slds-truncate" title="Created By">Created By</div>
+            </th>
+            <th scope="col">
+              <div class="slds-truncate" title="Current Owner">Current Owner</div>
+            </th>
+            <th scope="col">
+              <div class="slds-truncate" title="Created Date">Created Date</div>
+            </th>
+            <th scope="col">
+              <div class="slds-truncate" title="Links">Links</div>
+            </th>
+            <th scope="col">
+              <div class="slds-truncate" title="Actions">Actions</div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <template for:each={filesWithSelection} for:item="file">
+            <tr key={file.contentDocumentId} class="slds-hint-parent">
+              <td class="slds-text-align_center">
+                <div class="slds-form-element">
+                  <div class="slds-form-element__control">
+                    <div class="slds-checkbox">
+                      <lightning-input
+                        type="checkbox"
+                        variant="label-hidden"
+                        name={file.contentDocumentId}
+                        checked={file.isSelected}
+                        data-file-id={file.contentDocumentId}
+                        onchange={handleFileSelect}
+                      ></lightning-input>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="slds-truncate">
+                  <button
+                    class="slds-button slds-button_reset slds-text-link"
+                    data-file-id={file.contentVersionId}
+                    onclick={handleFileClick}
+                    title={file.fileName}
+                  >
+                    {file.fileName}
+                  </button>
+                </div>
+              </td>
+              <td>
+                <div class="slds-truncate" title={file.fileType}>
+                  <lightning-badge label={file.fileType}></lightning-badge>
+                </div>
+              </td>
+              <td>
+                <div class="slds-truncate" title={file.fileSize}>
+                  {file.fileSize}
+                </div>
+              </td>
+              <td>
+                <div class="slds-truncate" title={file.createdBy}>
+                  {file.createdBy}
+                </div>
+              </td>
+              <td>
+                <div class="slds-truncate" title={file.currentOwner}>
+                  {file.currentOwner}
+                </div>
+              </td>
+              <td>
+                <div class="slds-truncate" title={file.createdDate}>
+                  <lightning-formatted-date-time
+                    value={file.createdDate}
+                    year="numeric"
+                    month="short"
+                    day="2-digit"
+                  ></lightning-formatted-date-time>
+                </div>
+              </td>
+              <td>
+                <div class="slds-truncate">
+                  <template if:true={file.isOrphaned}>
+                    <lightning-badge
+                      label="Orphaned"
+                      variant="warning"
+                    ></lightning-badge>
+                  </template>
+                  <template if:false={file.isOrphaned}>
+                    <button 
+                      class="slds-button slds-button_reset" 
+                      data-file-id={file.contentDocumentId}
+                      data-file-name={file.fileName}
+                      onclick={handleLinksClick}
+                      title="View file connections"
+                    >
+                      <lightning-badge label={file.linkCount}></lightning-badge>
+                    </button>
+                  </template>
+                </div>
+              </td>
+              <td>
+                <lightning-button-menu
+                  alternative-text="Show menu"
+                  variant="border-filled"
+                  icon-size="x-small"
+                >
+                  <lightning-menu-item
+                    value="preview"
+                    label="Preview"
+                    icon-name="utility:preview"
+                    data-file-id={file.contentVersionId}
+                    onclick={handleFileClick}
+                  ></lightning-menu-item>
+                  <lightning-menu-item
+                    value="download"
+                    label="Download"
+                    icon-name="utility:download"
+                    href={file.downloadUrl}
+                    download
+                  ></lightning-menu-item>
+                  <lightning-menu-item
+                    value="share"
+                    label="Share"
+                    icon-name="utility:share"
+                    data-file-id={file.contentDocumentId}
+                    onclick={handleFileShareFromMenu}
+                  ></lightning-menu-item>
+                  <lightning-menu-item
+                    value="changeowner"
+                    label="Change Owner"
+                    icon-name="utility:user"
+                    data-file-id={file.contentDocumentId}
+                    data-file-name={file.fileName}
+                    data-current-owner={file.currentOwner}
+                    onclick={handleChangeOwnerFromMenu}
+                  ></lightning-menu-item>
+                </lightning-button-menu>
+              </td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+    </div>
+  </template>
+</template>

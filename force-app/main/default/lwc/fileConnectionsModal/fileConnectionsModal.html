@@ -1,0 +1,190 @@
+<template>
+  <template if:true={showModal}>
+    <section
+      role="dialog"
+      tabindex="-1"
+      aria-modal="true"
+      aria-labelledby="modal-heading-01"
+      class="slds-modal slds-fade-in-open slds-modal_large"
+    >
+      <div class="slds-modal__container">
+        <!-- Modal Header -->
+        <header class="slds-modal__header">
+          <button
+            class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+            title="Close"
+            onclick={handleClose}
+          >
+            <lightning-icon
+              icon-name="utility:close"
+              alternative-text="close"
+              variant="inverse"
+              size="small"
+            ></lightning-icon>
+            <span class="slds-assistive-text">Close</span>
+          </button>
+          <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">
+            File Connections: {fileName}
+          </h2>
+          <p class="slds-modal__tagline">
+            {connectionCount} connection{connectionCountPlural} found
+          </p>
+        </header>
+
+        <!-- Modal Body -->
+        <div
+          class="slds-modal__content slds-p-around_medium"
+          id="modal-content-id-1"
+        >
+          <template if:true={isLoading}>
+            <div class="slds-align_absolute-center slds-p-around_large">
+              <lightning-spinner
+                alternative-text="Loading connections..."
+                size="medium"
+              ></lightning-spinner>
+            </div>
+          </template>
+
+          <template if:true={hasConnections}>
+            <div class="slds-text-body_small slds-text-color_weak slds-m-bottom_medium">
+              Click on any connection to navigate to that record or location.
+            </div>
+
+            <!-- Connections List -->
+            <div class="connections-list">
+              <template for:each={connections} for:item="connection">
+                <div key={connection.id} class="connection-card slds-card slds-m-bottom_small">
+                  <div class="slds-card__header">
+                    <div class="slds-media slds-media_center">
+                      <div class="slds-media__figure">
+                        <div class="connection-icon-wrapper">
+                          <lightning-icon
+                            icon-name={connection.icon}
+                            size="medium"
+                            class="connection-icon"
+                          ></lightning-icon>
+                        </div>
+                      </div>
+                      <div class="slds-media__body">
+                        <div class="slds-grid slds-grid_align-spread">
+                          <div class="slds-col slds-has-flexi-truncate">
+                            <h3 class="slds-card__header-title">
+                              <button
+                                class="slds-button slds-button_reset slds-text-link connection-title"
+                                onclick={handleOpenConnection}
+                                data-url={connection.url}
+                                data-entity-name={connection.entityName}
+                                title={connection.entityName}
+                              >
+                                {connection.entityName}
+                              </button>
+                            </h3>
+                            <template if:true={connection.subtitle}>
+                              <p class="slds-text-body_small slds-text-color_default connection-subtitle">
+                                {connection.subtitle}
+                              </p>
+                            </template>
+                          </div>
+                          <div class="slds-col slds-no-flex">
+                            <lightning-button
+                              label="Open"
+                              variant="brand"
+                              size="small"
+                              onclick={handleOpenConnection}
+                              data-url={connection.url}
+                              data-entity-name={connection.entityName}
+                              class="connection-open-btn"
+                            ></lightning-button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="slds-card__body slds-card__body_inner">
+                    <div class="connection-details">
+                      <p class="slds-text-body_small slds-text-color_weak connection-description">
+                        <lightning-icon
+                          icon-name="utility:info"
+                          size="xx-small"
+                          class="slds-m-right_xx-small"
+                        ></lightning-icon>
+                        {connection.description} • {connection.entityType}
+                      </p>
+                      <template if:true={connection.additionalInfo}>
+                        <p class="slds-text-body_small slds-text-color_weak slds-m-top_xx-small connection-additional">
+                          <lightning-icon
+                            icon-name="utility:text"
+                            size="xx-small"
+                            class="slds-m-right_xx-small"
+                          ></lightning-icon>
+                          {connection.additionalInfo}
+                        </p>
+                      </template>
+                    </div>
+                    <div class="slds-m-top_small connection-badges">
+                      <lightning-badge
+                        label={connection.shareTypeLabel}
+                        variant="success"
+                        class="slds-m-right_x-small"
+                      ></lightning-badge>
+                      <template if:true={connection.visibility}>
+                        <lightning-badge
+                          label={connection.visibility}
+                          variant="outline"
+                        ></lightning-badge>
+                      </template>
+                    </div>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </template>
+
+          <template if:true={hasNoConnections}>
+            <div class="slds-align_absolute-center slds-p-around_large">
+              <div class="slds-text-align_center">
+                <lightning-icon
+                  icon-name="utility:info"
+                  size="large"
+                  variant="inverse"
+                ></lightning-icon>
+                <p class="slds-text-heading_medium slds-m-top_medium">
+                  No Connections Found
+                </p>
+                <p class="slds-text-body_regular slds-text-color_weak slds-m-top_small">
+                  This file is not currently linked to any records, users, or libraries.
+                </p>
+              </div>
+            </div>
+          </template>
+
+          <template if:true={error}>
+            <div class="slds-align_absolute-center slds-p-around_large">
+              <div class="slds-text-align_center">
+                <lightning-icon
+                  icon-name="utility:error"
+                  size="large"
+                  variant="error"
+                ></lightning-icon>
+                <p class="slds-text-heading_medium slds-m-top_medium">
+                  Error Loading Connections
+                </p>
+                <p class="slds-text-body_regular slds-text-color_weak slds-m-top_small">
+                  {error}
+                </p>
+              </div>
+            </div>
+          </template>
+        </div>
+
+        <!-- Modal Footer -->
+        <footer class="slds-modal__footer">
+          <button class="slds-button slds-button_neutral" onclick={handleClose}>
+            Close
+          </button>
+        </footer>
+      </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+  </template>
+</template>

@@ -1,0 +1,145 @@
+<template>
+  <div class="slds-card slds-p-around_medium filter-sidebar">
+    <h2 class="slds-text-heading_small slds-m-bottom_medium">
+      <lightning-icon
+        icon-name="utility:filter"
+        size="small"
+        class="slds-m-right_x-small"
+      ></lightning-icon>
+      Filters
+    </h2>
+
+    <!-- Search -->
+    <div class="slds-form-element slds-m-bottom_medium">
+      <label class="slds-form-element__label" for="search">Search Files</label>
+      <div class="slds-form-element__control">
+        <lightning-input
+          type="search"
+          name="search"
+          placeholder="Search by file name..."
+          value={searchTerm}
+          onchange={handleSearchChange}
+          variant="label-hidden"
+        ></lightning-input>
+      </div>
+    </div>
+
+    <!-- File Type Filter -->
+    <div class="slds-form-element slds-m-bottom_medium">
+      <lightning-combobox
+        name="fileType"
+        label="File Type"
+        value={filters.fileType}
+        placeholder="Select file type"
+        options={fileTypeOptions}
+        onchange={handleFilterChange}
+      ></lightning-combobox>
+    </div>
+
+    <!-- Owner Filter -->
+    <div class="slds-form-element slds-m-bottom_medium">
+      <lightning-combobox
+        name="ownerId"
+        label="Owner"
+        value={filters.ownerId}
+        placeholder="Select owner"
+        options={ownerOptions}
+        onchange={handleFilterChange}
+      ></lightning-combobox>
+    </div>
+
+    <!-- Date Range Filters -->
+    <fieldset class="slds-form-element slds-m-bottom_medium">
+      <legend class="slds-form-element__label slds-form-element__legend">
+        Created Date Range
+      </legend>
+      <div class="slds-form-element__control">
+        <lightning-input
+          type="date"
+          name="createdDateFrom"
+          label="From"
+          value={filters.createdDateFrom}
+          onchange={handleFilterChange}
+          class="slds-m-bottom_x-small"
+        ></lightning-input>
+        <lightning-input
+          type="date"
+          name="createdDateTo"
+          label="To"
+          value={filters.createdDateTo}
+          onchange={handleFilterChange}
+        ></lightning-input>
+      </div>
+    </fieldset>
+
+    <!-- File Size Range -->
+    <fieldset class="slds-form-element slds-m-bottom_medium">
+      <legend class="slds-form-element__label slds-form-element__legend">
+        File Size (KB)
+      </legend>
+      <div class="slds-form-element__control">
+        <lightning-input
+          type="number"
+          name="minSize"
+          label="Min Size"
+          placeholder="0"
+          min="0"
+          onchange={handleFilterChange}
+          class="slds-m-bottom_x-small"
+        ></lightning-input>
+        <lightning-input
+          type="number"
+          name="maxSize"
+          label="Max Size"
+          placeholder="No limit"
+          min="0"
+          onchange={handleFilterChange}
+        ></lightning-input>
+      </div>
+    </fieldset>
+
+    <!-- Usage Level Filter -->
+    <div class="slds-form-element slds-m-bottom_medium">
+      <lightning-combobox
+        name="usageLevel"
+        label="File Usage Level"
+        value={filters.usageLevel}
+        placeholder="Select usage level"
+        options={usageLevelOptions}
+        onchange={handleFilterChange}
+      ></lightning-combobox>
+    </div>
+
+    <!-- Legacy Orphaned Files Checkbox (for backward compatibility) -->
+    <div class="slds-form-element slds-m-bottom_medium">
+      <lightning-input
+        type="checkbox"
+        name="showOrphaned"
+        label="Show only orphaned files (legacy)"
+        checked={filters.showOrphaned}
+        onchange={handleFilterChange}
+      ></lightning-input>
+    </div>
+
+    <!-- Inactive Owner Filter -->
+    <div class="slds-form-element slds-m-bottom_medium">
+      <lightning-input
+        type="checkbox"
+        name="inactiveOwners"
+        label="Show files owned by inactive users"
+        checked={filters.inactiveOwners}
+        onchange={handleFilterChange}
+      ></lightning-input>
+    </div>
+
+    <!-- Clear Filters Button -->
+    <template if:true={hasActiveFilters}>
+      <lightning-button
+        label="Clear All Filters"
+        onclick={handleClearFilters}
+        variant="destructive-text"
+        class="slds-m-top_medium"
+      ></lightning-button>
+    </template>
+  </div>
+</template>

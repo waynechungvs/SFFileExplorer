@@ -1,0 +1,28 @@
+/* Ensure link buttons look like actual links */
+.slds-text-link {
+  color: var(--slds-g-color-brand-base-10, #0176d3);
+  text-decoration: none;
+}
+
+.slds-text-link:hover {
+  color: var(--slds-g-color-brand-base-20, #014486);
+  text-decoration: underline;
+}
+
+.slds-text-link:focus {
+  outline: 1px solid var(--slds-g-color-brand-base-10, #0176d3);
+  outline-offset: 2px;
+}
+
+/* File card specific styling */
+.file-card {
+  transition: box-shadow 0.2s ease;
+}
+
+.file-card:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.file-card.selected {
+  border: 2px solid var(--slds-g-color-brand-base-10, #0176d3);
+}
