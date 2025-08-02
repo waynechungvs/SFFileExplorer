@@ -263,9 +263,11 @@ export default class OrgFileExplorer extends LightningElement {
 
   handleViewConnections(event) {
     const { fileId, fileName } = event.detail;
+    console.log('OrgFileExplorer: handleViewConnections called with:', { fileId, fileName });
     this.connectionsFileId = fileId;
     this.connectionsFileName = fileName;
     this.showConnectionsModal = true;
+    console.log('OrgFileExplorer: Modal properties set - connectionsFileId:', this.connectionsFileId, 'showConnectionsModal:', this.showConnectionsModal);
   }
 
   handleCloseConnections() {

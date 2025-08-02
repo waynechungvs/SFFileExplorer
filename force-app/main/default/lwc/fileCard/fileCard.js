@@ -38,11 +38,22 @@ export default class FileCard extends LightningElement {
 
   handleLinksClick(event) {
     event.stopPropagation();
+    console.log('FileCard: handleLinksClick called, this.file:', this.file);
+    
+    if (!this.file) {
+      console.error('FileCard: this.file is undefined!');
+      return;
+    }
+    
+    const fileId = this.file.contentDocumentId;
+    const fileName = this.file.fileName;
+    console.log('FileCard: Dispatching viewconnections with fileId:', fileId, 'fileName:', fileName);
+    
     this.dispatchEvent(
       new CustomEvent("viewconnections", {
         detail: { 
-          fileId: this.file.contentDocumentId,
-          fileName: this.file.fileName
+          fileId: fileId,
+          fileName: fileName
         }
       })
     );

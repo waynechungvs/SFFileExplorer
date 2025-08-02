@@ -70,16 +70,30 @@ export default class FileList extends LightningElement {
     let fileId, fileName;
     
     // Handle different event sources
-    if (event.detail) {
-      // From fileCard component (card view)
+    if (event.detail && event.detail.fileId) {
+      // From fileCard component (card view) - event has detail with data
       fileId = event.detail.fileId;
       fileName = event.detail.fileName;
-    } else {
+      console.log('FileList: Links clicked from card view - fileId:', fileId, 'fileName:', fileName);
+    } else if (event.currentTarget && event.currentTarget.dataset) {
       // From list view element (dataset attributes)
       fileId = event.currentTarget.dataset.fileId;
       fileName = event.currentTarget.dataset.fileName;
+      console.log('FileList: Links clicked from list view - fileId:', fileId, 'fileName:', fileName);
+      console.log('FileList: Dataset attributes:', event.currentTarget.dataset);
+    } else {
+      // Invalid event - log and return early
+      console.error('FileList: handleLinksClick called with invalid event:', event);
+      return;
     }
     
+    // Only proceed if we have valid file data
+    if (!fileId) {
+      console.error('FileList: No valid fileId found, skipping event dispatch');
+      return;
+    }
+    
+    console.log('FileList: Dispatching viewconnections event with:', { fileId, fileName });
     this.dispatchEvent(
       new CustomEvent("viewconnections", {
         detail: { fileId, fileName }

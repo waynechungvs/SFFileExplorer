@@ -3,13 +3,37 @@ import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import getFileConnections from "@salesforce/apex/OrgFileExplorerController.getFileConnections";
 
 export default class FileConnectionsModal extends LightningElement {
-  @api fileId;
-  @api fileName;
-  @api showModal = false;
+  _fileId;
+  _showModal = false;
   
+  @api fileName;
   connections = [];
   isLoading = false;
   error = null;
+
+  @api
+  get fileId() {
+    return this._fileId;
+  }
+  
+  set fileId(value) {
+    this._fileId = value;
+    if (value && this.showModal) {
+      this.loadConnections();
+    }
+  }
+  
+  @api
+  get showModal() {
+    return this._showModal;
+  }
+  
+  set showModal(value) {
+    this._showModal = value;
+    if (value && this.fileId) {
+      this.loadConnections();
+    }
+  }
 
   connectedCallback() {
     if (this.showModal && this.fileId) {
@@ -20,21 +44,28 @@ export default class FileConnectionsModal extends LightningElement {
   // Load connections when fileId changes
   @api
   async loadConnections() {
-    if (!this.fileId) return;
+    if (!this.fileId) {
+      console.log('FileConnectionsModal: No fileId provided, skipping loadConnections');
+      return;
+    }
     
+    console.log('FileConnectionsModal: Loading connections for fileId:', this.fileId);
     this.isLoading = true;
     this.error = null;
+    this.connections = []; // Reset connections
     
     try {
       const rawConnections = await getFileConnections({ contentDocumentId: this.fileId });
+      console.log('FileConnectionsModal: Raw connections received:', rawConnections);
       // Process connections to add computed properties
       this.connections = rawConnections.map(conn => ({
         ...conn,
         shareTypeLabel: this.getShareTypeLabel(conn.shareType)
       }));
+      console.log('FileConnectionsModal: Processed connections:', this.connections);
     } catch (error) {
       this.error = error.body ? error.body.message : error.message;
-      console.error("Error loading file connections:", error);
+      console.error("FileConnectionsModal: Error loading file connections:", error);
     } finally {
       this.isLoading = false;
     }

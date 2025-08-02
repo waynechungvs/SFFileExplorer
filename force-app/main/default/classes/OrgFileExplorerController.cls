@@ -270,7 +270,8 @@ public without sharing class OrgFileExplorerController {
         filters.get('createdDateFrom') != null
       ) {
         String dateFrom = (String) filters.get('createdDateFrom');
-        query += ' AND CreatedDate >= ' + dateFrom;
+        // Format date for SOQL: YYYY-MM-DD format needs to be converted to DateTime
+        query += ' AND CreatedDate >= ' + dateFrom + 'T00:00:00Z';
       }
 
       if (
@@ -278,7 +279,8 @@ public without sharing class OrgFileExplorerController {
         filters.get('createdDateTo') != null
       ) {
         String dateTo = (String) filters.get('createdDateTo');
-        query += ' AND CreatedDate <= ' + dateTo;
+        // Format date for SOQL: YYYY-MM-DD format needs to be converted to DateTime
+        query += ' AND CreatedDate <= ' + dateTo + 'T23:59:59Z';
       }
 
       if (filters.containsKey('minSize') && filters.get('minSize') != null) {

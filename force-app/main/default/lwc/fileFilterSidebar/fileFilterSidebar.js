@@ -11,7 +11,6 @@ export default class FileFilterSidebar extends LightningElement {
     createdDateTo: "",
     minSize: null,
     maxSize: null,
-    showOrphaned: false,
     usageLevel: "",
     inactiveOwners: false
   };
@@ -38,10 +37,10 @@ export default class FileFilterSidebar extends LightningElement {
 
     console.log("Filter change:", { field, value }); // Debug log
 
-    if (field === "showOrphaned" || field === "inactiveOwners") {
+    if (field === "inactiveOwners") {
       this.filters[field] = event.target.checked;
     } else if (field === "minSize" || field === "maxSize") {
-      this.filters[field] = value ? parseInt(value, 10) * 1024 * 1024 : null; // Convert MB to bytes
+      this.filters[field] = value ? parseInt(value, 10) : null; // Keep as KB - Apex will convert to bytes
     } else {
       this.filters[field] = value;
     }
@@ -58,7 +57,6 @@ export default class FileFilterSidebar extends LightningElement {
       createdDateTo: "",
       minSize: null,
       maxSize: null,
-      showOrphaned: false,
       usageLevel: "",
       inactiveOwners: false
     };
