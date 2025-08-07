@@ -1,4 +1,4 @@
-name: Manual Deploy to Salesforce Org
+name: Universal Salesforce Deploy
 
 on:
   workflow_dispatch:
@@ -8,13 +8,10 @@ on:
         required: true
         default: 'SIT'
         type: choice
-        options:
-          - SIT
-          - UAT
-          - PROD
+        options: [SIT, UAT, PROD]
 
       validate_only:
-        description: 'Only Validate? (true = just check, no deploy)'
+        description: 'Only Validate? (true = dry run)'
         required: true
         default: 'true'
         type: choice
@@ -25,14 +22,10 @@ on:
         required: true
         default: 'NoTestRun'
         type: choice
-        options:
-          - NoTestRun
-          - RunLocalTests
-          - RunAllTestsInOrg
-          - RunSpecifiedTests
+        options: [NoTestRun, RunLocalTests, RunAllTestsInOrg, RunSpecifiedTests]
 
       test_classes:
-        description: 'Test Class names (comma-separated, only used when "RunSpecifiedTests")'
+        description: 'Test Class names (comma-separated)'
         required: false
 
 jobs:
@@ -40,13 +33,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v4
 
       - name: Install Salesforce CLI
         uses: sfdx-actions/setup-sfdx@v1
 
-      - name: Load Auth URL for Target Org
+      - name: Load auth URL for target org
         run: |
           if [ "${{ github.event.inputs.target_org }}" = "SIT" ]; then
             echo "SFDX_AUTH=${{ secrets.SFDX_SIT_URL }}" >> $GITHUB_ENV
@@ -59,17 +52,20 @@ jobs:
             echo "ORG_ALIAS=DeployPROD" >> $GITHUB_ENV
           fi
 
-      - name: Authenticate with Salesforce Org
+      - name: Authenticate
         run: |
           echo "$SFDX_AUTH" > auth.txt
           sfdx auth:sfdxurl:store -f auth.txt -a $ORG_ALIAS
-          sfdx force:org:display -u $ORG_ALIAS
 
-      - name: Deploy to Salesforce (Metadata API)
+      - name: Determine project type and deploy
         run: |
-          DEPLOY_DIR="."  # 根目錄就是 metadata 結構所在
-
-          DEPLOY_CMD="sfdx force:mdapi:deploy -u $ORG_ALIAS -d $DEPLOY_DIR -w 10"
+          if [ -f "sfdx-project.json" ]; then
+            echo "Detected: SFDX project structure"
+            DEPLOY_CMD="sfdx force:source:deploy -u $ORG_ALIAS -p force-app/main/default -w 10"
+          else
+            echo "Detected: Metadata format"
+            DEPLOY_CMD="sfdx force:mdapi:deploy -u $ORG_ALIAS -d . -w 10"
+          fi
 
           if [[ "${{ github.event.inputs.validate_only }}" == "true" ]]; then
             DEPLOY_CMD="$DEPLOY_CMD --checkonly"
@@ -81,5 +77,6 @@ jobs:
             DEPLOY_CMD="$DEPLOY_CMD --testlevel ${{ github.event.inputs.test_level }}"
           fi
 
-          echo "🚀 Running: $DEPLOY_CMD"
+          echo "🚀 Executing: $DEPLOY_CMD"
           eval $DEPLOY_CMD
+
