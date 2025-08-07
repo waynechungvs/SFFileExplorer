@@ -29,7 +29,8 @@ jobs:
         node scripts/generatePackageXml.js "${{ github.event.inputs.metadataPath }}"
 
     - name: Upload package.xml
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: package-xml
         path: package.xml
+
