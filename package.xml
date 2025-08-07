@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+  <types>
+    <members>OrgFileExplorerController</members>
+    <members>OrgFileExplorerControllerTest</members>
+    <name>ApexClass</name>
+  </types>
+  <types>
+    <members>bulkShareModal</members>
+    <members>fileCard</members>
+    <members>fileConnectionsModal</members>
+    <members>fileFilterSidebar</members>
+    <members>fileList</members>
+    <members>fileOwnershipModal</members>
+    <members>filePreviewModal</members>
+    <members>fileShareModal</members>
+    <members>fileToolbar</members>
+    <members>orgFileExplorer</members>
+    <members>paginationControls</members>
+    <name>LightningComponentBundle</name>
+  </types>
+  <version>59.0</version>
+</Package>
