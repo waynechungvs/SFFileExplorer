@@ -1,0 +1,35 @@
+name: Generate package.xml
+
+on:
+  workflow_dispatch:
+    inputs:
+      metadataPath:
+        description: 'Path to metadata folder (e.g. force-app/main/default)'
+        required: true
+        default: 'force-app/main/default'
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+
+    - name: Install dependencies
+      run: npm install fast-xml-parser
+
+    - name: Generate package.xml
+      run: |
+        node scripts/generatePackageXml.js "${{ github.event.inputs.metadataPath }}"
+
+    - name: Upload package.xml
+      uses: actions/upload-artifact@v3
+      with:
+        name: package-xml
+        path: package.xml
