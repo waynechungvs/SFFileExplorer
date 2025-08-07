@@ -22,16 +22,22 @@ function scanMetadataTypes(basePath) {
     const fullDir = path.join(basePath, dir);
     if (!fs.existsSync(fullDir)) continue;
 
-    const files = fs.readdirSync(fullDir);
-    const items = new Set();
+    const entries = fs.readdirSync(fullDir, { withFileTypes: true });
+    const members = new Set();
 
-    files.forEach(file => {
-      const match = file.match(/^(.+?)\.(cls|trigger|js|html|xml|meta\.xml)$/);
-      if (match) items.add(match[1]);
-    });
+    for (const entry of entries) {
+      if (entry.isDirectory()) {
+        members.add(entry.name); // for lwc, aura, etc.
+      } else if (entry.isFile()) {
+        const match = entry.name.match(/^(.+?)\.(cls|trigger|xml|page|resource|permissionset|layout|object|workflow)/);
+        if (match) {
+          members.add(match[1]);
+        }
+      }
+    }
 
-    if (items.size > 0) {
-      typesMap[metadataTypes[dir]] = [...items];
+    if (members.size > 0) {
+      typesMap[metadataTypes[dir]] = [...members];
     }
   }
 
@@ -60,3 +66,4 @@ const xml = buildPackageXml(metadata);
 
 fs.writeFileSync('package.xml', xml);
 console.log('✅ package.xml generated successfully.');
+
